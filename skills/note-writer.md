@@ -29,11 +29,13 @@ release lands, before anything downstream can leak in.
    mostly means crude is being consumed into barrels, not that the market is
    strong. Do not treat runs alone as a bullish input; use them to explain
    where the crude went.
-4. **Cushing outweighs its size.** Cushing near ~20 million barrels is
-   tank-bottom territory — physical constraints amplify price impact there
-   far beyond what the headline U.S. number suggests. When Cushing is within
-   a couple million barrels of ~20M, weight the Cushing level above the
-   national change when you make your call.
+4. **Cushing outweighs its size — inside the band.** The tank-bottom band is
+   Cushing at or below 21.0M bbl (the ~20M bbl working-storage floor at the
+   delivery hub, plus a small buffer). Inside the band, physical constraints
+   amplify price impact far beyond what the headline U.S. number suggests —
+   weight the Cushing level above the national change when you make your call.
+   Above the band, hub storage is ample: Cushing becomes a supporting detail,
+   and the change-vs-baseline gap makes the call on its own.
 
 ## Output shape — exactly this, no other fields
 
@@ -45,6 +47,12 @@ INVALIDATION: <a concrete, checkable number — e.g. "wrong if next week's crude
 COULDNT_SEE:  <consensus expectations, SPR flows, demand data, positions — the blind spots, named>
 ```
 
+- Write in desk voice. The note never mentions the skill, its heuristics, or
+  the rules it follows — every line is a claim about the market, not about how
+  the note was made.
+- Every number in the note comes from the single input row. No trend, streak,
+  or ranking claims ("third straight draw", "largest of the summer") — one
+  row cannot support them.
 - The headline makes a claim ("The build looks larger than it is"), never a
   restatement ("Crude built 3.2 million barrels").
 - The three bullets in NOTE carry a number each. No number, no bullet.

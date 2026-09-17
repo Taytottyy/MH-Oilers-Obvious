@@ -18,8 +18,14 @@ The repository's first code is the EIA weekly analyst dataset pipeline
   Friday `week_ending`, converts thousand → million barrels, computes the
   5-year seasonal baseline, writes `data/full.csv`, `data/notes_input.csv`,
   `data/answers.csv` (13 rows, 2026-06-19 → 2026-09-11).
-- `skills/note-writer.md`, `skills/scorer.md` — analyst and scorer prompts.
+- `skills/note-writer.md`, `skills/scorer.md` — analyst and scorer prompts,
+  tuned (note-writer v3, scorer v2); `docs/skill-tuning-log.md` records the
+  one-change-at-a-time tuning and validation evidence.
 - `docs/data-sources.md` — pinned sources, units, data wrinkles.
+- `scripts/validate_note.py`, `scripts/verdict_rule.py` — mechanical checks
+  the skills reference (note shape/banned phrases/one-row rule; scorer ±1%
+  band boundary cases). Keep both ruff-clean; their behavior is pinned by
+  `tests/test_skill_tooling.py`.
 - `tests/` — pytest suite (unit conversion, baseline math, join integrity,
   split-guard).
 - CI: `.github/workflows/ci.yml` runs `ruff check` + `pytest` on PRs and
