@@ -32,11 +32,19 @@ invalidation triggered was right by accident: log it as invalidated. The
 scorecard tracks luck separately from skill; never celebrate a lucky call as
 a good one, and never drop the flag to protect the hit rate.
 
+What you may read to check the invalidation: an invalidation that names a WTI
+number checks against `answers.csv` alone. An invalidation that names an
+inventory number (crude change, Cushing level) checks against the FOLLOWING
+week's row in `data/full.csv` — that row's inventory columns only, nothing
+else in the file. Next-week price never comes from anywhere but `answers.csv`.
+
 ## The `why` rule — name the number
 
 Every graded week gets a `why`. In a `why`, name the specific number that was
-over- or under-weighted — e.g. "trusted the 17.4M bbl build against a −2.4M
-baseline and under-weighted Cushing at 22.6M approaching tank-bottoms".
+over- or under-weighted — e.g. "priced the 17.423M bbl build against the
+−2.371M bbl baseline as a fresh surplus; WTI rose 6.47% (78.94 → 84.05)
+anyway". Read the note's CALL as its first token (BULLISH or BEARISH);
+anything after it on that line is annotation.
 A generic `why` ("market conditions shifted", "sentiment improved") is a
 defect: re-run the grading for that week until the `why` names a number.
 On a Wrong or invalidated verdict, read the `why` and ask what the note got
