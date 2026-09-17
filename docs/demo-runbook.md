@@ -16,7 +16,7 @@ Before you start (2 minutes, no network needed — the repo ships the
   and the Slack-ready post. All three are cuttable; the runbook says in what
   order.
 - The **live scorecard** open at
-  https://taytottyy.github.io/Obvious-Hackathon/ — the deployed version of
+  https://taytottyy.github.io/MH-Oilers-Obvious/ — the deployed version of
   `web/` (GitHub Pages). A zero-setup fallback if the local workbook isn't
   staged.
 

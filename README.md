@@ -8,7 +8,7 @@ grades itself a week later — and keeps the honest record either way.
 broker connection.** A person decides what, if anything, to do with the call.
 
 **Live demo:** the scorecard frontend is deployed on GitHub Pages at
-https://taytottyy.github.io/Obvious-Hackathon/ — it renders the same committed
+https://taytottyy.github.io/MH-Oilers-Obvious/ — it renders the same committed
 CSVs (`data/notes.csv`, `data/answers.csv`, `data/full.csv`) client-side.
 
 ## What this is
