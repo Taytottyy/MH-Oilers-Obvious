@@ -15,6 +15,10 @@ Before you start (2 minutes, no network needed — the repo ships the
 - The demo assets staged: the workbook dashboard, the 13-week timeline view,
   and the Slack-ready post. All three are cuttable; the runbook says in what
   order.
+- The **live scorecard** open at
+  https://taytottyy.github.io/Obvious-Hackathon/ — the deployed version of
+  `web/` (GitHub Pages). A zero-setup fallback if the local workbook isn't
+  staged.
 
 **The beat order never changes:** release → note → scorecard → the miss.
 
