@@ -1,0 +1,8 @@
+# Runtime dependencies for scripts/build_dataset.py
+pandas>=2.2
+xlrd>=2.0.1
+requests>=2.32
+
+# Test and lint tooling — installed alongside the above by CI and contributors.
+pytest>=8.3
+ruff>=0.8
