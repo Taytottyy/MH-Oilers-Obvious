@@ -7,9 +7,13 @@ grades itself a week later — and keeps the honest record either way.
 **This is analysis for human review only. It never places trades and has no
 broker connection.** A person decides what, if anything, to do with the call.
 
-**Live demo:** the scorecard frontend is deployed on GitHub Pages at
-https://taytottyy.github.io/MH-Oilers-Obvious/ — it renders the same committed
-CSVs (`data/notes.csv`, `data/answers.csv`, `data/full.csv`) client-side.
+**Live demo:** the scorecard frontend is deployed at
+https://0wyy300x9a-8123.hosted.obvious.ai/MH-Oilers-Obvious/ — it renders the
+same committed CSVs (`data/notes.csv`, `data/answers.csv`, `data/full.csv`)
+client-side. (A GitHub Pages deploy workflow is also in
+`.github/workflows/pages.yml`; it activates once Pages is enabled in the repo
+settings, after which `https://taytottyy.github.io/MH-Oilers-Obvious/` works
+too.)
 
 ## What this is
 
