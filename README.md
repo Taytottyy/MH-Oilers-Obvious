@@ -7,6 +7,10 @@ grades itself a week later — and keeps the honest record either way.
 **This is analysis for human review only. It never places trades and has no
 broker connection.** A person decides what, if anything, to do with the call.
 
+**Live demo:** the scorecard frontend is deployed on GitHub Pages at
+https://taytottyy.github.io/MH-Oilers-Obvious/ — it renders the same committed
+CSVs (`data/notes.csv`, `data/answers.csv`, `data/full.csv`) client-side.
+
 ## What this is
 
 Three layers, kept in separate lanes so the predictions stay honest:
