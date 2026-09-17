@@ -1,0 +1,465 @@
+/* Design language ported from the validated EIA-Analyst-Scorecard folio:
+   Inter, near-black hero block, white cards with 1px #e0e0e0 borders,
+   green Right / red Wrong / gray Open pills. */
+
+:root {
+  --black: #0a0a0a;
+  --gray-600: #666666;
+  --gray-400: #999999;
+  --gray-100: #e5e5e5;
+  --gray-50: #f5f5f5;
+  --off-white: #fafafa;
+  --white: #ffffff;
+  --border: #e0e0e0;
+  --border-light: rgba(255, 255, 255, 0.1);
+  --text-primary: var(--black);
+  --text-secondary: var(--gray-600);
+  --text-tertiary: var(--gray-400);
+  --positive: #10b981;
+  --negative: #ef4444;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  background: var(--off-white);
+  color: var(--text-primary);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.1;
+}
+
+.layout {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.report-header {
+  margin-bottom: 2rem;
+}
+
+.report-header h1 {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+.report-subtitle {
+  font-size: 1.125rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem;
+}
+
+.report-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  flex-wrap: wrap;
+}
+
+.author-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.report-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 0 2rem;
+}
+
+/* Hit-rate hero — near-black block with the huge light-weight number. */
+.hero-metric {
+  background: var(--black);
+  color: var(--white);
+  border-radius: 8px;
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.hero-metric .big-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.75rem;
+}
+
+.hero-metric .big {
+  font-size: clamp(4rem, 10vw, 6.5rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.count-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+  flex-wrap: wrap;
+}
+
+.count {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.count .n {
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.count .l {
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.count.right .n {
+  color: var(--positive);
+}
+
+.count.wrong .n {
+  color: var(--negative);
+}
+
+.hero-metric .formula {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+}
+
+.hero-metric .formula code {
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+/* Analysis sections and the scorecard table. */
+.analysis-section {
+  margin: 0 0 3rem;
+}
+
+.analysis-section h3 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+}
+
+.analysis-section p {
+  font-size: 1rem;
+  line-height: 1.8;
+  margin: 0 0 1rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  margin: 1.5rem 0 0;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.data-table th {
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.data-table td.num,
+.data-table th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.move-pos {
+  color: var(--positive);
+}
+
+.move-neg {
+  color: var(--negative);
+}
+
+/* Pills. */
+.pill {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.pill.right {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+}
+
+.pill.wrong {
+  background: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
+}
+
+.pill.open {
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+/* Chart cards. */
+.chart-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.chart-card h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 0 0.25rem;
+}
+
+.chart-card .chart-sub {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 0 0 1.25rem;
+}
+
+.chart-container {
+  position: relative;
+  height: 340px;
+}
+
+/* Memo-style note cards. */
+.note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.note-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--black);
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.note-card .week-label {
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 0.75rem;
+}
+
+.note-card .headline {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 1rem;
+}
+
+.note-card .bullets {
+  margin: 0 0 1.25rem;
+  padding-left: 1.25rem;
+}
+
+.note-card .bullets li {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.call-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0 0 0.75rem;
+}
+
+.kv {
+  border-left: 3px solid var(--black);
+  padding: 0.5rem 0.75rem;
+  background: var(--gray-50);
+  border-radius: 0 4px 4px 0;
+}
+
+.kv.call-bear {
+  border-left-color: var(--negative);
+}
+
+.kv.call-bull {
+  border-left-color: var(--positive);
+}
+
+.kv .k {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 0.15rem;
+}
+
+.kv .v {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.couldnt {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.verdict-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.pill.move-pill {
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+.why-box {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.why-box .k {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 0.35rem;
+}
+
+/* Open-call banner. */
+.open-banner {
+  background: var(--black);
+  color: var(--white);
+  border-radius: 8px;
+  padding: 2rem 2.5rem;
+  margin: 0 0 3rem;
+}
+
+.open-banner-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 1.25rem;
+}
+
+.open-banner-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.ob-field .k {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.25rem;
+}
+
+.ob-field .v {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.ob-wide {
+  grid-column: 1 / -1;
+}
+
+.app-footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 720px) {
+  .layout {
+    padding: 2rem 1rem;
+  }
+
+  .hero-metric {
+    grid-template-columns: 1fr;
+    padding: 1.75rem;
+  }
+
+  .call-box,
+  .open-banner-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .note-card {
+    padding: 1.25rem;
+  }
+}
