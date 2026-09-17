@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { Chart, type ChartConfiguration } from 'chart.js'
+import Chart from 'chart.js/auto'
+import type { ChartConfiguration } from 'chart.js'
 import { formatPct, type WeekView } from '../data/notes'
 
 const GREEN = '#10b981'

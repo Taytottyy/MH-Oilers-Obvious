@@ -3,9 +3,10 @@ import { cleanup, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 // Chart.js cannot acquire a 2D context in jsdom — stub the class and assert
-// the surrounding rendered structure instead.
-vi.mock('chart.js', () => ({
-  Chart: class {
+// the surrounding rendered structure instead. The app imports the registration
+// entrypoint ('chart.js/auto'), so mock that module.
+vi.mock('chart.js/auto', () => ({
+  default: class {
     destroy() {}
   },
 }))
