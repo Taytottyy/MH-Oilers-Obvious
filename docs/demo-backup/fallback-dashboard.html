@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<title>EIA Analyst — Scorecard &amp; Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+:root { --black:#0a0a0a; --gray-600:#666; --gray-400:#999; --gray-100:#e5e5e5; --gray-50:#f5f5f5; --off-white:#fafafa; --white:#fff; --border:#e0e0e0; --border-light:rgba(255,255,255,.1); --positive:#10b981; --negative:#ef4444; }
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.6;margin:0;background:var(--off-white);color:var(--black)}
+h1,h2,h3{line-height:1.1}
+.report{max-width:800px;margin:0 auto;padding:3rem 2rem}
+.report-header h1{font-size:2.25rem;font-weight:400;letter-spacing:-.02em;line-height:1.2;margin:0 0 .75rem}
+.report-subtitle{font-size:1.125rem;font-weight:300;line-height:1.5;color:var(--gray-600);margin:0 0 1.5rem}
+.report-meta{font-size:.875rem;color:var(--gray-400)}
+.report-meta b{color:var(--black);font-weight:500}
+.executive-summary{margin:2rem 0 3rem}
+.executive-summary h2{font-size:.75rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--gray-400);margin:0 0 1rem}
+.executive-summary p{font-size:1.125rem;line-height:1.8;margin:0 0 1rem}
+.hero-metric{background:var(--black);color:#fff;border-radius:8px;padding:2.5rem;margin-bottom:2rem;display:grid;grid-template-columns:1.2fr 1fr;gap:2.5rem;align-items:center}
+.hero-metric .big{font-size:6.5rem;font-weight:300;letter-spacing:-.03em;line-height:1}
+.hero-metric .big-label{font-size:.75rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.75rem}
+.hero-metric .formula{font-size:.9375rem;color:rgba(255,255,255,.7);line-height:1.7}
+.hero-metric .formula code{font-family:inherit;background:rgba(255,255,255,.08);padding:.15rem .5rem;border-radius:4px;font-size:.875rem}
+.count-row{display:flex;gap:1.5rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-light);flex-wrap:wrap}
+.count{display:flex;flex-direction:column;gap:.25rem}
+.count .n{font-size:1.75rem;font-weight:500;line-height:1}
+.count .l{font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.count.right .n{color:var(--positive)} .count.wrong .n{color:var(--negative)}
+.chart-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:1.75rem;margin-bottom:2rem}
+.chart-card h3{font-size:1rem;font-weight:500;margin:0 0 .25rem}
+.chart-card .chart-sub{font-size:.8125rem;color:var(--gray-600);margin:0 0 1.25rem}
+.chart-container{position:relative;height:340px}
+.analysis-section{margin:2.5rem 0 3rem}
+.analysis-section h3{font-size:1.25rem;font-weight:400;margin:0 0 1rem}
+.analysis-section p{font-size:1rem;line-height:1.8;margin:0 0 1rem}
+.data-table{width:100%;margin:1.5rem 0 2rem;border-collapse:collapse}
+.data-table th,.data-table td{text-align:left;padding:.7rem .5rem;border-bottom:1px solid var(--border);font-size:.8125rem;font-weight:400}
+.data-table th{font-size:.625rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400)}
+.data-table td.num,.data-table th.num{text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font-size:.6875rem;font-weight:500;letter-spacing:.03em;padding:.2rem .6rem;border-radius:999px;white-space:nowrap}
+.pill.right,.pill.bull{background:rgba(16,185,129,.12);color:#047857}
+.pill.wrong,.pill.bear{background:rgba(239,68,68,.10);color:#b91c1c}
+.pill.open{background:var(--gray-100);color:var(--gray-600)}
+.move-pos{color:var(--positive)} .move-neg{color:var(--negative)}
+.slack-note{background:#fff;border:1px solid var(--border);border-radius:8px;padding:1.75rem}
+.slack-note .channel{display:flex;align-items:center;gap:.5rem;font-size:.875rem;font-weight:600;padding-bottom:.75rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+.slack-note .channel .hash{color:var(--gray-400);font-weight:400}
+.slack-note .msg{display:flex;gap:.75rem}
+.slack-note .avatar{width:36px;height:36px;border-radius:6px;background:var(--black);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.625rem;font-weight:600;flex-shrink:0}
+.slack-note .body{font-size:.9375rem;line-height:1.6;min-width:0}
+.slack-note .author-line{margin-bottom:.5rem}
+.slack-note .author-line .name{font-weight:600}
+.slack-note .author-line .time{color:var(--gray-400);font-size:.75rem;margin-left:.375rem}
+.slack-note h4.slack-headline{font-size:1rem;font-weight:700;margin:.25rem 0 .75rem;line-height:1.45}
+.slack-note ul.tight{margin:0 0 1rem;padding-left:1.25rem}
+.slack-note ul.tight li{font-size:.9375rem;line-height:1.6;margin-bottom:.375rem}
+.slack-note .call-box{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:0 0 .75rem}
+.slack-note .kv{border-left:3px solid var(--black);padding:.5rem .75rem;background:var(--gray-50);border-radius:0 4px 4px 0}
+.slack-note .kv.call-bear{border-left-color:var(--negative)}
+.slack-note .kv .k{font-size:.625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.15rem}
+.slack-note .kv .v{font-size:.875rem;font-weight:500;line-height:1.5}
+.slack-note .couldnt{font-size:.8125rem;color:var(--gray-600);font-style:italic}
+.miss-card{background:#fff;border:1px solid var(--border);border-left:4px solid var(--negative);border-radius:8px;padding:2rem}
+.miss-card .week-label{font-size:.625rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+.miss-card h4.headline{font-size:1.25rem;font-weight:600;line-height:1.4;margin:0 0 1rem}
+.miss-card .bullets{margin:0 0 1.25rem;padding-left:1.25rem}
+.miss-card .bullets li{font-size:.9375rem;line-height:1.7;margin-bottom:.5rem;color:var(--gray-600)}
+.miss-card .verdict-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.miss-card .why-box{background:var(--off-white);border:1px solid var(--border);border-radius:6px;padding:1rem 1.25rem;font-size:.9375rem;line-height:1.7}
+.miss-card .why-box .k{font-size:.625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.35rem}
+</style></head>
+<body><div class="report">
+<header class="report-header" id="header">
+  <h1>EIA Analyst — Scorecard &amp; Dashboard</h1>
+  <p class="report-subtitle">Thirteen weeks of graded crude-oil market calls: every note the agent wrote, what it called, and what actually happened next.</p>
+  <div class="report-meta"><b>Obvious</b> · September 17, 2026 · Data: EIA Weekly Petroleum Status Report</div>
+</header>
+
+<div id="hit-rate" class="hero-metric">
+  <div>
+    <div class="big-label">Hit rate — graded calls only</div>
+    <div class="big">50.0%</div>
+    <div class="count-row">
+      <div class="count right"><span class="n">6</span><span class="l">Right</span></div>
+      <div class="count wrong"><span class="n">6</span><span class="l">Wrong</span></div>
+      <div class="count"><span class="n">0</span><span class="l">Flat</span></div>
+      <div class="count"><span class="n">3</span><span class="l">Invalidated</span></div>
+      <div class="count"><span class="n">1</span><span class="l">Open</span></div>
+    </div>
+  </div>
+  <div class="formula"><code>Right ÷ (Right + Wrong)</code> over the twelve graded weeks, June 19 – September 4, 2026. Flat calls (moves within ±1%) are excluded — there were none. The open September 11 call is excluded until it grades.</div>
+</div>
+
+<div id="calls-over-time" class="chart-card">
+  <h3>Calls over time</h3>
+  <p class="chart-sub">Weekly price move following each call, colored by verdict — green right, red wrong, gray open. June 19 – September 11, 2026.</p>
+  <div class="chart-container"><canvas id="callsChart"></canvas></div>
+</div>
+
+<div id="wti-series" class="chart-card">
+  <h3>WTI price series</h3>
+  <p class="chart-sub">Weekly WTI at each release, $/bbl. $81.36 on June 19 → $99.08 on September 11, a +21.8% move across the record.</p>
+  <div class="chart-container"><canvas id="wtiChart"></canvas></div>
+</div>
+
+<div id="scorecard" class="analysis-section">
+  <h3>The full record, week by week</h3>
+  <table class="data-table">
+    <thead><tr><th>Week ending</th><th>Call</th><th>Verdict</th><th class="num">Price move</th><th class="num">Invalidated</th></tr></thead>
+    <tbody>
+      <tr><td>2026-06-19</td><td><span class="pill bull">BULLISH</span></td><td><span class="pill wrong">Wrong</span></td><td class="num move-neg">−9.55%</td><td class="num">no</td></tr>
+      <tr><td>2026-06-26</td><td><span class="pill bull">BULLISH</span></td><td><span class="pill wrong">Wrong</span></td><td class="num move-neg">−4.23%</td><td class="num">no</td></tr>
+      <tr><td>2026-07-03</td><td><span class="pill bull">BULLISH</span></td><td><span class="pill right">Right</span></td><td class="num move-pos">+2.53%</td><td class="num">no</td></tr>
+      <tr><td>2026-07-10</td><td><span class="pill bull">BULLISH</span></td><td><span class="pill right">Right</span></td><td class="num move-pos">+11.78%</td><td class="num">no</td></tr>
+      <tr><td>2026-07-17</td><td><span class="pill bull">BULLISH</span></td><td><span class="pill right">Right</span></td><td class="num move-pos">+9.67%</td><td class="num">no</td></tr>
+      <tr><td>2026-07-24</td><td><span class="pill bull">BULLISH</span></td><td><span class="pill wrong">Wrong</span></td><td class="num move-neg">−4.59%</td><td class="num move-neg">yes</td></tr>
+      <tr><td>2026-07-31</td><td><span class="pill bull">BULLISH</span></td><td><span class="pill wrong">Wrong</span></td><td class="num move-neg">−6.59%</td><td class="num move-neg">yes</td></tr>
+      <tr><td>2026-08-07</td><td><span class="pill bear">BEARISH</span></td><td><span class="pill wrong">Wrong</span></td><td class="num move-pos">+6.47%</td><td class="num">no</td></tr>
+      <tr><td>2026-08-14</td><td><span class="pill bear">BEARISH</span></td><td><span class="pill wrong">Wrong</span></td><td class="num move-pos">+3.93%</td><td class="num">no</td></tr>
+      <tr><td>2026-08-21</td><td><span class="pill bear">BEARISH</span></td><td><span class="pill right">Right</span></td><td class="num move-neg">−3.13%</td><td class="num move-neg">yes</td></tr>
+      <tr><td>2026-08-28</td><td><span class="pill bull">BULLISH</span></td><td><span class="pill right">Right</span></td><td class="num move-pos">+7.75%</td><td class="num">no</td></tr>
+      <tr><td>2026-09-04</td><td><span class="pill bull">BULLISH</span></td><td><span class="pill right">Right</span></td><td class="num move-pos">+8.66%</td><td class="num">no</td></tr>
+      <tr><td>2026-09-11</td><td><span class="pill bear">BEARISH</span></td><td><span class="pill open">Open</span></td><td class="num">—</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="slack-note" class="analysis-section">
+  <div class="slack-note">
+    <div class="channel"><span class="hash">#</span> eia-notes</div>
+    <div class="msg">
+      <div class="avatar">EIA</div>
+      <div class="body">
+        <div class="author-line"><span class="name">EIA Analyst</span><span class="time">10:32 AM</span></div>
+        <h4 class="slack-headline">The seasonal draw is not showing up — crude drew 2.4M bbl short of norm and product tanks built 2.4M bbl on top</h4>
+        <ul class="tight">
+          <li>Crude fell 0.64M bbl against a 5-yr average draw of 3.078M bbl — a 2.438M bbl shortfall versus what this week normally delivers.</li>
+          <li>Gasoline built 0.794M bbl and distillate built 1.585M bbl — 2.379M bbl of product build, so nothing downstream is absorbing the shallow crude draw.</li>
+          <li>Cushing at 21.482M bbl is above the 21.0M bbl tank-bottom band — hub storage is ample, so the baseline gap makes the call on its own.</li>
+        </ul>
+        <div class="call-box">
+          <div class="kv call-bear"><div class="k">Call</div><div class="v">BEARISH</div></div>
+          <div class="kv"><div class="k">Invalidation</div><div class="v">wrong if next week's crude change is a draw of more than 2.0M bbl</div></div>
+        </div>
+        <div class="couldnt">Couldn't see: consensus expectations, SPR flows, demand data, positions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="miss-explained" class="analysis-section">
+  <div class="miss-card">
+    <div class="week-label">Week ending 2026-08-07 · graded the following week</div>
+    <h4 class="headline">A 19.8M bbl surprise build against a negative baseline — the kind of number that usually sells off</h4>
+    <ul class="bullets">
+      <li>Crude built 17.423M bbl against a 5-yr average change of −2.371M bbl — a 19.794M bbl gap versus what this week normally delivers.</li>
+      <li>Products did not absorb it: gasoline drew 0.968M bbl and distillate was flat (−0.010M bbl), so the build sits in tanks rather than in the supply chain.</li>
+      <li>Cushing at 22.566M bbl is above the 21.0M bbl tank-bottom band — hub storage is ample, so the baseline gap makes the call on its own.</li>
+    </ul>
+    <div class="verdict-row"><span class="pill bear">BEARISH</span><span class="pill wrong">Wrong</span><span class="pill open">price move +6.47%</span></div>
+    <div class="why-box"><div class="k">Why it was wrong</div>The note priced the 17.423M bbl build against the −2.371M bbl baseline as a fresh surplus; WTI rose 6.47% ($78.94 → $84.05) anyway.</div>
+  </div>
+</div>
+</div>
+<script>
+Chart.defaults.font.family="Inter, Helvetica, Arial, sans-serif";Chart.defaults.font.size=12;Chart.defaults.color='#666';
+const weekLabels=['Jun 19','Jun 26','Jul 3','Jul 10','Jul 17','Jul 24','Jul 31','Aug 7','Aug 14','Aug 21','Aug 28','Sep 4','Sep 11'];
+const moves=[-9.55,-4.23,2.53,11.78,9.67,-4.59,-6.59,6.47,3.93,-3.13,7.75,8.66,null];
+const verdicts=['Wrong','Wrong','Right','Right','Right','Wrong','Wrong','Wrong','Wrong','Right','Right','Right','Open'];
+const wti=[81.36,73.59,70.48,72.26,80.77,88.58,84.51,78.94,84.05,87.35,84.62,91.18,99.08];
+const barColors=verdicts.map(v=>v==='Right'?'#10b981':v==='Wrong'?'#ef4444':'#b3b3b3');
+new Chart(document.getElementById('callsChart'),{type:'bar',data:{labels:weekLabels,datasets:[{label:'Price move after call (%)',data:moves,backgroundColor:barColors,borderRadius:4}]},options:{animation:false,responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:'#e5e5e5'},border:{display:false},ticks:{padding:8,callback:v=>v+'%'}}},plugins:{legend:{display:true,position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',padding:16,boxWidth:8}}}}});
+new Chart(document.getElementById('wtiChart'),{type:'line',data:{labels:weekLabels,datasets:[{label:'WTI ($/bbl)',data:wti,borderColor:'#0a0a0a',backgroundColor:'rgba(10,10,10,0.05)',fill:true,tension:0.35,pointRadius:4,pointBackgroundColor:barColors,pointBorderColor:barColors}]},options:{animation:false,responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:'#e5e5e5'},border:{display:false},ticks:{padding:8,callback:v=>'$'+v}}},plugins:{legend:{display:false}}}});
+</script>
+</body></html>
